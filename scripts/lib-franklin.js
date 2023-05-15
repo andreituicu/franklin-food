@@ -186,6 +186,17 @@ export async function fetchPlaceholders(prefix = 'default') {
 export function decorateBlock(block) {
   const shortBlockName = block.classList[0];
   if (shortBlockName) {
+    // <PoC>
+    const classList = [...block.classList];
+    let blockType = classList.shift();
+    blockType = blockType.split('-').map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()).join(' ');
+    if (classList.length) {
+      blockType += ` (${classList.map((s) => s.split('-').join(' ')).join(', ')})`;
+    }
+    blockType = `Block: ${blockType}`;
+    block.setAttribute('franklin-block-name', blockType);
+    // </PoC>
+
     block.classList.add('block');
     block.setAttribute('data-block-name', shortBlockName);
     block.setAttribute('data-block-status', 'initialized');

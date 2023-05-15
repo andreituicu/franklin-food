@@ -235,3 +235,54 @@ main .section[data-section-status='initialized'] {
 main .section.highlight {
   background-color: var(--highlight-background-color);
 }
+
+/* Highlight markup PoC */
+main .section,
+main .default-content-wrapper,
+main .block {
+  position: relative;
+  margin-top: 35px;
+}
+
+main .section:hover,
+main .default-content-wrapper:hover,
+main .block:hover {
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+}
+
+main .section {
+  border: 3px solid #035fe6;
+}
+
+main .section::before {
+  background: #035fe6;
+  content: "Section";
+}
+
+main .default-content-wrapper {
+  border: 3px solid green;
+}
+
+main .default-content-wrapper::before {
+  background: green;
+  content: "Default Content Wrapper";
+}
+
+main .block {
+  border: 3px solid orange;
+}
+
+main .block::before {
+  background: orange;
+  content: attr(franklin-block-name);
+}
+
+main .section::before,
+main .default-content-wrapper::before,
+main .block::before {
+  position: absolute;
+  top: -35px;
+  z-index: 9999;
+  color: white;
+}
+/* Highlight markup PoC */
