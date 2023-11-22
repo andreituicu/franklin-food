@@ -118,8 +118,7 @@ function loadDelayed() {
 async function loadPage() {
   console.error('Number of hyperthreads: ', navigator.hardwareConcurrency);
   console.error('Memory: ', navigator.deviceMemory);
-  console.error('Memory', JSON.stringify(performance.memory));
-  console.error('Network: ', JSON.stringify(navigator));
+  console.error('Memory', console.memory.jsHeapSizeLimit);
   console.error(navigator);
   await loadEager(document);
   await loadLazy(document);
