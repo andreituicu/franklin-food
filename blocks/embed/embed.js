@@ -51,7 +51,7 @@ const embedVimeo = (url, autoplay) => {
 
 const embedTwitter = (url) => {
   const embedHTML = `<blockquote class="twitter-tweet"><a href="${url.href}"></a></blockquote>`;
-  loadScript('https://platform.twitter.com/widgets.js');
+  // loadScript('https://platform.twitter.com/widgets.js');
   return embedHTML;
 };
 
