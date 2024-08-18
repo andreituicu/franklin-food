@@ -272,4 +272,7 @@ header nav .nav-sections ul > li > ul > li {
 /* tools */
 header nav .nav-tools {
   grid-area: tools;
+  display: flex;
+  gap: 15px;
+  font-size: var(--body-font-size-s);
 }
