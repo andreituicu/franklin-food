@@ -1,4 +1,5 @@
 import { readBlockConfig, decorateIcons } from '../../scripts/lib-franklin.js';
+import { aemPolicy } from '../../scripts/scripts.js';
 
 /**
  * loads and decorates the footer
@@ -13,7 +14,7 @@ export default async function decorate(block) {
   const resp = await fetch(`${footerPath}.plain.html`, window.location.pathname.endsWith('/footer') ? { cache: 'reload' } : {});
   const html = await resp.text();
   const footer = document.createElement('div');
-  footer.innerHTML = html;
+  footer.innerHTML = aemPolicy.createHTML(html);
   await decorateIcons(footer);
   block.append(footer);
 }

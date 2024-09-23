@@ -121,9 +121,15 @@ async function loadPage() {
   loadDelayed();
 }
 
-async function setCSP() {
-  const resp = await fetch(`${window.hlx.codeBasePath}/scripts/csp.json`);
-  const json = await resp.json();
+function setCSP() {
+  const json = {
+    "require-trusted-types-for": [
+      "'script'"
+    ],
+    "trusted-types": [
+        "aemPolicy"
+    ]
+  };
   const directives = Object.keys(json);
   const policy = directives.map((directive) => `${directive} ${json[directive].join(' ')}`).join('; ');
   const meta = document.createElement('meta');
@@ -133,24 +139,9 @@ async function setCSP() {
   document.head.appendChild(meta);
 }
 
-function defineTrustedTypes() {
-  setCSP();
-  const escapeHTMLPolicy = trustedTypes.createPolicy("aemPolicy", {
-    createHTML: (string) =>
-      string
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;"),
-  });
-  
-  let el = document.getElementsByTagName("h1")[0];
-  console.log(el);
-  const escaped = escapeHTMLPolicy.createHTML("<img src=x onerror=alert(1)>");
-  console.log(escaped instanceof TrustedHTML); // true
-  el.innerHTML = escaped;
-  el.innerHTML = 'test';
-}
+setCSP();
+export const aemPolicy = trustedTypes.createPolicy("aemPolicy", {
+  createHTML: (string) => string,
+});
 
-defineTrustedTypes();
 loadPage();

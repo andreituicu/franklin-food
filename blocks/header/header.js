@@ -1,4 +1,5 @@
 import { getMetadata, decorateIcons, decorateButtons } from '../../scripts/lib-franklin.js';
+import { aemPolicy } from '../../scripts/scripts.js';
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
@@ -102,7 +103,7 @@ export default async function decorate(block) {
     // decorate nav DOM
     const nav = document.createElement('nav');
     nav.id = 'nav';
-    nav.innerHTML = html;
+    nav.innerHTML = aemPolicy.createHTML(html);
 
     const classes = ['brand', 'sections', 'tools'];
     classes.forEach((c, i) => {
@@ -130,9 +131,9 @@ export default async function decorate(block) {
     // hamburger for mobile
     const hamburger = document.createElement('div');
     hamburger.classList.add('nav-hamburger');
-    hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
+    hamburger.innerHTML = aemPolicy.createHTML(`<button type="button" aria-controls="nav" aria-label="Open navigation">
         <span class="nav-hamburger-icon"></span>
-      </button>`;
+      </button>`);
     hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
     nav.prepend(hamburger);
     nav.setAttribute('aria-expanded', 'false');
