@@ -116,13 +116,41 @@ function loadDelayed() {
 }
 
 async function loadPage() {
-  console.error('Number of hyperthreads: ', navigator.hardwareConcurrency);
-  console.error('Memory: ', navigator.deviceMemory);
-  console.error('Memory', console.memory.jsHeapSizeLimit);
-  console.error(navigator);
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
 }
 
+async function setCSP() {
+  const resp = await fetch(`${window.hlx.codeBasePath}/scripts/csp.json`);
+  const json = await resp.json();
+  const directives = Object.keys(json);
+  const policy = directives.map((directive) => `${directive} ${json[directive].join(' ')}`).join('; ');
+  const meta = document.createElement('meta');
+  meta.setAttribute('http-equiv', 'Content-Security-Policy');
+  meta.setAttribute('content', policy);
+  document.addEventListener('securitypolicyviolation', (e) => sampleRUM('csperror', { source: `${e.documentURI}:${e.lineNumber}:${e.columnNumber}`, target: e.blockedURI }));
+  document.head.appendChild(meta);
+}
+
+function defineTrustedTypes() {
+  setCSP();
+  const escapeHTMLPolicy = trustedTypes.createPolicy("aemPolicy", {
+    createHTML: (string) =>
+      string
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;"),
+  });
+  
+  let el = document.getElementsByTagName("h1")[0];
+  console.log(el);
+  const escaped = escapeHTMLPolicy.createHTML("<img src=x onerror=alert(1)>");
+  console.log(escaped instanceof TrustedHTML); // true
+  el.innerHTML = escaped;
+  el.innerHTML = 'test';
+}
+
+defineTrustedTypes();
 loadPage();
